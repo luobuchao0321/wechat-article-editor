@@ -116,14 +116,84 @@ const tableOnly = (html: string) => {
   return match ? match[0] : html;
 };
 
+const cellText = (value: unknown) => {
+  if (value === null || value === undefined) return '';
+  if (value instanceof Date) return value.toLocaleDateString('zh-CN');
+  if (typeof value === 'object') {
+    const maybeText = value as { text?: unknown; result?: unknown; richText?: Array<{ text?: string }> };
+    if (typeof maybeText.text === 'string') return maybeText.text;
+    if (maybeText.result !== undefined) return cellText(maybeText.result);
+    if (Array.isArray(maybeText.richText)) return maybeText.richText.map((item) => item.text || '').join('');
+  }
+  return String(value);
+};
+
+const csvToRows = (text: string) => {
+  const rows: string[][] = [];
+  let row: string[] = [];
+  let cell = '';
+  let quoted = false;
+
+  for (let i = 0; i < text.length; i += 1) {
+    const char = text[i];
+    const next = text[i + 1];
+
+    if (char === '"' && quoted && next === '"') {
+      cell += '"';
+      i += 1;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === ',' && !quoted) {
+      row.push(cell);
+      cell = '';
+    } else if ((char === '\n' || char === '\r') && !quoted) {
+      if (char === '\r' && next === '\n') i += 1;
+      row.push(cell);
+      rows.push(row);
+      row = [];
+      cell = '';
+    } else {
+      cell += char;
+    }
+  }
+
+  row.push(cell);
+  if (row.some(Boolean)) rows.push(row);
+  return rows;
+};
+
+const rowsToTable = (rows: string[][], id: string) => {
+  const maxColumns = rows.reduce((max, row) => Math.max(max, row.length), 0);
+  const body = rows
+    .map((row) => {
+      const cells = Array.from({ length: maxColumns }, (_, index) => `<td>${escapeHtml(row[index] || '')}</td>`).join('');
+      return `<tr>${cells}</tr>`;
+    })
+    .join('');
+  return `<table id="${escapeHtml(id)}"><tbody>${body}</tbody></table>`;
+};
+
 const parseExcel = async (buffer: Buffer, ext: string) => {
-  const XLSX = await import('xlsx');
-  const workbook = ext === 'csv'
-    ? XLSX.read(buffer.toString('utf8'), { type: 'string' })
-    : XLSX.read(buffer, { type: 'buffer' });
-  return workbook.SheetNames.map((name) => {
-    const html = tableOnly(XLSX.utils.sheet_to_html(workbook.Sheets[name], { id: `sheet-${name}` }));
-    return `<section style="margin:24px 0;"><h3 style="margin:0 0 12px;font-size:16px;">${escapeHtml(name)}</h3><div style="overflow-x:auto;">${html}</div></section>`;
+  if (ext === 'csv') {
+    const html = rowsToTable(csvToRows(buffer.toString('utf8')), 'sheet-csv');
+    return `<section style="margin:24px 0;"><h3 style="margin:0 0 12px;font-size:16px;">CSV</h3><div style="overflow-x:auto;">${html}</div></section>`;
+  }
+
+  const ExcelJS = await import('exceljs');
+  const workbook = new ExcelJS.Workbook();
+  await workbook.xlsx.load(buffer as any);
+
+  return workbook.worksheets.map((sheet) => {
+    const rows: string[][] = [];
+    sheet.eachRow({ includeEmpty: false }, (row) => {
+      const values: string[] = [];
+      for (let column = 1; column <= sheet.columnCount; column += 1) {
+        values.push(cellText(row.getCell(column).value));
+      }
+      rows.push(values);
+    });
+    const html = tableOnly(rowsToTable(rows, `sheet-${sheet.id}`));
+    return `<section style="margin:24px 0;"><h3 style="margin:0 0 12px;font-size:16px;">${escapeHtml(sheet.name)}</h3><div style="overflow-x:auto;">${html}</div></section>`;
   }).join('');
 };
 
@@ -153,9 +223,11 @@ export async function POST(request: NextRequest) {
     if (ext === 'docx') {
       html = await parseDocx(buffer);
       type = 'Word';
-    } else if (['xlsx', 'xls', 'csv'].includes(ext)) {
+    } else if (['xlsx', 'csv'].includes(ext)) {
       html = await parseExcel(buffer, ext);
       type = 'Excel';
+    } else if (ext === 'xls') {
+      throw new Error('暂不支持老式 .xls，请另存为 .xlsx 或 .csv 后导入。');
     } else if (ext === 'pdf') {
       html = await parsePdf(buffer);
       type = 'PDF';
@@ -165,7 +237,7 @@ export async function POST(request: NextRequest) {
     } else if (ext === 'ppt') {
       throw new Error('暂不支持老式 .ppt，请另存为 .pptx 后导入。');
     } else {
-      throw new Error('暂不支持该文件类型。支持 docx、xlsx、xls、csv、pdf、pptx。');
+      throw new Error('暂不支持该文件类型。支持 docx、xlsx、csv、pdf、pptx。');
     }
 
     return NextResponse.json({ title: name.replace(/\.[^.]+$/, ''), type, html });

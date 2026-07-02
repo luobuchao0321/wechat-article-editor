@@ -107,6 +107,33 @@ npm run build
 npm start
 ```
 
+### 桌面版安装包
+
+1.0.1 开始提供 Electron 桌面版打包配置。桌面版本质上是本地运行的 ContentCraft，不需要把文章内容上传到第三方服务。
+
+```bash
+# 本地调试桌面版
+npm run desktop:dev
+
+# 当前系统可构建的桌面安装包
+npm run desktop:build
+
+# macOS DMG，包含 Apple Silicon 与 Intel
+npm run dist:mac
+
+# macOS 单架构构建，适合排查或单独发包
+npm run dist:mac:arm64
+npm run dist:mac:x64
+
+# Windows NSIS 安装包，配置为 x64 与 32 位
+npm run dist:win
+
+# Linux AppImage / deb
+npm run dist:linux
+```
+
+构建产物默认输出到 `release/`。Windows 与 Linux 安装包建议在对应系统或 GitHub Actions 构建机上生成，macOS 本机优先生成 DMG。
+
 ## 部署
 
 ### Vercel
@@ -135,7 +162,8 @@ Cloudflare Pages 也可以部署，但 Next.js 16 的适配需要额外关注运
 - React 19
 - TypeScript
 - Tailwind CSS
-- Cheerio / Mammoth / xlsx / pdf-parse
+- Electron
+- Cheerio / Mammoth / ExcelJS / pdf-parse
 
 ## 合规说明
 

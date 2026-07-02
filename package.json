@@ -1,12 +1,21 @@
 {
   "name": "contentcraft",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "ContentCraft · 内容匠：开源公众号编辑器，支持文章转载、样式编辑、模块复用，适配 macOS / Windows / Linux",
+  "main": "electron/main.cjs",
   "scripts": {
     "dev": "next dev --webpack -p 3001",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint .",
+    "electron:dev": "concurrently -k \"npm run dev\" \"wait-on http://localhost:3001 && electron .\"",
+    "desktop:dev": "npm run electron:dev",
+    "desktop:build": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder",
+    "dist:mac": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --mac dmg --arm64 --x64",
+    "dist:mac:arm64": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --mac dmg --arm64",
+    "dist:mac:x64": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --mac dmg --x64",
+    "dist:win": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --win nsis --x64 --ia32",
+    "dist:linux": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --linux AppImage deb --x64"
   },
   "keywords": [
     "wechat",
@@ -26,6 +35,7 @@
     "autoprefixer": "^10.4.24",
     "cheerio": "^1.2.0",
     "clsx": "^2.1.1",
+    "exceljs": "^4.4.0",
     "html2canvas": "^1.4.1",
     "lucide-react": "^0.563.0",
     "mammoth": "^1.12.0",
@@ -36,16 +46,71 @@
     "react-dom": "^19.2.4",
     "react-easy-crop": "^5.5.6",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^3.4.1",
-    "xlsx": "^0.18.5"
+    "tailwindcss": "^3.4.1"
   },
   "devDependencies": {
     "@types/adm-zip": "^0.5.8",
     "@types/node": "^25.2.0",
     "@types/react": "^19.2.11",
     "@types/react-dom": "^19.2.3",
+    "concurrently": "^10.0.3",
+    "electron": "^43.0.0",
+    "electron-builder": "^26.15.3",
     "eslint": "^9.39.2",
     "eslint-config-next": "^16.1.6",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "wait-on": "^9.0.10"
+  },
+  "build": {
+    "appId": "cn.contentcraft.editor",
+    "productName": "ContentCraft 内容匠",
+    "copyright": "Copyright © 2026 ContentCraft",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "electron/**/*",
+      ".next/standalone/**/*",
+      "public/**/*",
+      "package.json"
+    ],
+    "asarUnpack": [
+      ".next/standalone/**/*"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64",
+            "x64"
+          ]
+        }
+      ]
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
+    },
+    "linux": {
+      "category": "Office",
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
   }
 }

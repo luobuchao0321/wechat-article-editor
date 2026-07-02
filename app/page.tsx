@@ -1926,7 +1926,7 @@ export default function Home() {
         }
         const sizeKb = Math.ceil(new Blob([html]).size / 1024);
         await navigator.clipboard.writeText(html);
-        alert(`HTML 已复制！约 ${sizeKb} KB。请粘贴到 KindEditor 的“源代码”模式。`);
+        alert(`HTML 已复制！约 ${sizeKb} KB。可粘贴到微信公众号编辑器、135 类编辑器或后台 HTML/源代码模式。`);
     } catch (err: any) {
         console.error('复制失败', err);
         alert(`复制失败: ${err.message || '未知错误'}`);
@@ -2182,7 +2182,7 @@ export default function Home() {
     if (typeof document === 'undefined') return;
     const acceptMap = {
       word: '.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      excel: '.xlsx,.xls,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv',
+      excel: '.xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv',
       pdf: '.pdf,application/pdf',
       ppt: '.pptx,application/vnd.openxmlformats-officedocument.presentationml.presentation',
     };
@@ -3297,7 +3297,7 @@ export default function Home() {
                         <AlertCircle className="w-3.5 h-3.5" />
                         兼容提示
                       </strong>
-                      粘贴到 CMS 或 KindEditor 时，建议先进入“源代码/HTML”模式。保真模式会把复杂公众号模块转换为更稳定的 HTML。
+                      粘贴到微信公众号编辑器、135 类编辑器、CMS 或 KindEditor 时，建议先进入“源代码/HTML”模式。保真模式会把复杂公众号模块转换为更稳定的 HTML。
                     </div>
 
                     <div className="space-y-3 rounded-xl border border-slate-100 bg-white/82 p-3 shadow-[0_12px_30px_rgba(15,23,42,.04)]">
@@ -3338,7 +3338,7 @@ export default function Home() {
                             checked={exportFormat === 'full'}
                             onChange={() => setExportFormat('full')}
                           />
-                          KindEditor 保真模式
+                          公众号/135 保真模式
                         </label>
                       </div>
                     </div>
@@ -3348,7 +3348,7 @@ export default function Home() {
                       className="w-full h-11 rounded-lg bg-slate-950 text-white hover:bg-slate-800 transition flex items-center justify-center gap-2 text-sm font-semibold shadow-[0_14px_28px_rgba(15,23,42,.18)]"
                     >
                       <Copy className="w-4 h-4" />
-                      复制 CMS/后台 HTML
+                      一键复制公众号编辑器 HTML
                     </button>
                     <button
                       onClick={handleCopyPreviewCode}
