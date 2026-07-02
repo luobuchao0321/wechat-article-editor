@@ -9,6 +9,7 @@ const publicDir = path.join(root, 'public');
 const standalonePublicDir = path.join(standaloneDir, 'public');
 const localOnlyPaths = [
   '.cache',
+  path.join('.next', 'node_modules'),
   'article.json',
   'wechat_article.html',
 ];

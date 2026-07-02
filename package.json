@@ -92,6 +92,7 @@
       ]
     },
     "win": {
+      "artifactName": "ContentCraft-Setup-${version}-${arch}.${ext}",
       "target": [
         {
           "target": "nsis",
@@ -103,7 +104,9 @@
       ]
     },
     "linux": {
+      "artifactName": "ContentCraft-${version}-${arch}.${ext}",
       "category": "Office",
+      "maintainer": "ContentCraft <noreply@contentcraft.local>",
       "target": [
         "AppImage",
         "deb"
