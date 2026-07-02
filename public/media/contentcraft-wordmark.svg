@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1280" height="360" viewBox="0 0 1280 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1280" height="360" rx="42" fill="#F8FAFC"/>
+  <rect x="78" y="58" width="244" height="244" rx="56" fill="#0F172A"/>
+  <rect x="135" y="108" width="130" height="150" rx="24" fill="#F8FAFC"/>
+  <rect x="164" y="144" width="72" height="14" rx="7" fill="#0F172A"/>
+  <rect x="164" y="176" width="92" height="12" rx="6" fill="#CBD5E1"/>
+  <path d="M232 216L285 163C294 154 309 154 318 163C327 172 327 187 318 196L265 249L224 262L232 216Z" fill="#14B8A6"/>
+  <path d="M279 169L312 202" stroke="#F8FAFC" stroke-width="12" stroke-linecap="round"/>
+  <text x="374" y="166" font-family="Inter, Arial, sans-serif" font-size="76" font-weight="800" fill="#0F172A">ContentCraft</text>
+  <text x="378" y="232" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="500" fill="#475569">公众号转载 / 开源编辑器</text>
+</svg>
