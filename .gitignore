@@ -7,6 +7,7 @@ pnpm-lock.yaml
 /.next/
 /out/
 /build/
+/release/
 deploy/.next/
 *.tsbuildinfo
 next-env.d.ts
