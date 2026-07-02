@@ -1,0 +1,51 @@
+{
+  "name": "contentcraft",
+  "version": "1.0.0",
+  "description": "ContentCraft · 内容匠：开源公众号编辑器，支持文章转载、样式编辑、模块复用，适配 macOS / Windows / Linux",
+  "scripts": {
+    "dev": "next dev --webpack -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "keywords": [
+    "wechat",
+    "editor",
+    "article",
+    "repost",
+    "cms",
+    "html",
+    "公众号",
+    "编辑器",
+    "转载"
+  ],
+  "author": "ContentCraft",
+  "license": "MIT",
+  "dependencies": {
+    "adm-zip": "^0.5.17",
+    "autoprefixer": "^10.4.24",
+    "cheerio": "^1.2.0",
+    "clsx": "^2.1.1",
+    "html2canvas": "^1.4.1",
+    "lucide-react": "^0.563.0",
+    "mammoth": "^1.12.0",
+    "next": "^16.1.6",
+    "pdf-parse": "^2.4.5",
+    "postcss": "^8.5.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-easy-crop": "^5.5.6",
+    "tailwind-merge": "^3.4.0",
+    "tailwindcss": "^3.4.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.8",
+    "@types/node": "^25.2.0",
+    "@types/react": "^19.2.11",
+    "@types/react-dom": "^19.2.3",
+    "eslint": "^9.39.2",
+    "eslint-config-next": "^16.1.6",
+    "typescript": "^5.9.3"
+  }
+}

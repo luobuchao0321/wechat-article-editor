@@ -1,0 +1,13 @@
+Dockerfile
+.dockerignore
+node_modules
+npm-debug.log
+README.md
+.next
+.git
+.DS_Store
+._*
+**/._*
+**/*._*
+.cache
+._.cache

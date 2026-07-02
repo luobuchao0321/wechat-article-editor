@@ -1,0 +1,17 @@
+services:
+  bianjiqi:
+    container_name: bianjiqi-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - "3002:3002"
+    environment:
+      - NODE_ENV=production
+      - WECHAT_IMAGE_CACHE_DIR=/app/.cache
+    volumes:
+      - wechat-image-cache:/app/.cache
+
+volumes:
+  wechat-image-cache:
