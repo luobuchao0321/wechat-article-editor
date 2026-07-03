@@ -203,7 +203,7 @@ Cloudflare Pages 也可以部署，但 Next.js 16 的适配需要额外关注运
 小程序中可以使用 `public/media/sponsor-poster.png` 作为中间页图片，并在 `<image>` 组件上开启 `show-menu-by-longpress="true"`，引导用户长按保存后打开微信扫码。
 
 <p align="center">
-  <img src="./docs/assets/sponsor-poster-preview.jpg" alt="支持 ContentCraft 开源创作" width="320" />
+  <img src="./docs/assets/sponsor-poster-preview-v2.jpg" alt="支持 ContentCraft 开源创作" width="320" />
 </p>
 
 ## License

@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from 'react';
 import {
   AlertCircle,
-  BookOpen,
   Clipboard,
   Code2,
   Copy,
@@ -45,6 +44,9 @@ import {
   MoveVertical,
   Trash2,
   Upload,
+  Bot,
+  Wand2,
+  KeyRound,
 } from 'lucide-react';
 import ImageCropper from '@/components/ImageCropper';
 import { cn } from '@/lib/utils';
@@ -148,6 +150,13 @@ export default function Home() {
   const [useProxyInExport, setUseProxyInExport] = useState(false);
   const [inlineImagesInExport, setInlineImagesInExport] = useState(true);
   const [exportFormat, setExportFormat] = useState<'kindeditor' | 'full'>('full');
+  const [assistantTask, setAssistantTask] = useState<'polish' | 'titles' | 'digest' | 'humanize' | 'audit'>('polish');
+  const [assistantBaseUrl, setAssistantBaseUrl] = useState('https://api.openai.com/v1');
+  const [assistantModel, setAssistantModel] = useState('gpt-4.1-mini');
+  const [assistantApiKey, setAssistantApiKey] = useState('');
+  const [assistantResult, setAssistantResult] = useState('');
+  const [assistantNotice, setAssistantNotice] = useState('');
+  const [assistantLoading, setAssistantLoading] = useState(false);
   const previewIframeRef = useRef<HTMLIFrameElement>(null);
   const manualEditorRef = useRef<HTMLDivElement>(null);
   const lastSyncedContent = useRef<string>(manualContent);
@@ -2474,6 +2483,118 @@ export default function Home() {
       alert(`复制失败: ${err.message || '未知错误'}`);
     }
   };
+
+  const stripHtmlForAssistant = (html: string) => {
+    if (typeof window === 'undefined') return html.replace(/<[^>]+>/g, ' ');
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(`<div>${html}</div>`, 'text/html');
+    return (doc.body.textContent || '').replace(/\n{3,}/g, '\n\n').trim();
+  };
+
+  const getAssistantSourceText = () => {
+    const selection = typeof window !== 'undefined' ? window.getSelection() : null;
+    const selectedText = selection?.toString().trim() || '';
+    if (selectedText && manualEditorRef.current?.contains(selection?.anchorNode || null)) return selectedText;
+    const contentText = stripHtmlForAssistant(manualEditorRef.current?.innerHTML || manualContent);
+    return [manualTitle, manualSummary, contentText].filter(Boolean).join('\n\n');
+  };
+
+  const localAssistantFallback = (task: typeof assistantTask, source: string) => {
+    const clean = source.replace(/\s+/g, ' ').trim();
+    const firstSentence = clean.split(/[。！？!?]/).find(Boolean) || clean.slice(0, 80);
+    if (task === 'titles') {
+      return [
+        `1. ${firstSentence.slice(0, 24)}，真正重要的是什么`,
+        `2. 看懂这件事，内容运营会少走很多弯路`,
+        `3. 为什么你的公众号文章，总是差一点被读完`,
+        `4. 把文章写清楚之前，先把用户想明白`,
+        `5. 一个更适合公众号的内容工作流`,
+      ].join('\n');
+    }
+    if (task === 'digest') {
+      return `这篇文章围绕“${firstSentence.slice(0, 36)}”展开，帮助读者更清楚地理解问题、优化表达，并形成可执行的公众号内容工作流。`;
+    }
+    if (task === 'audit') {
+      return [
+        '检查建议：',
+        '1. 开头可以更快进入具体场景，减少抽象铺垫。',
+        '2. 每个小节最好保留一个明确观点，避免只做泛泛说明。',
+        '3. 如果涉及数据、案例或转载内容，请补充来源，降低事实和侵权风险。',
+        '4. 结尾建议给出可执行动作，不要只停留在总结口号。',
+      ].join('\n');
+    }
+    return clean
+      .split(/(?<=[。！？!?])/)
+      .map((sentence) => sentence.trim())
+      .filter(Boolean)
+      .map((sentence) => sentence.replace(/非常|极其|显著/g, '更').replace(/通过本文我们可以看到/g, '说到底'))
+      .join('\n\n');
+  };
+
+  const textToWechatHtml = (text: string) =>
+    text
+      .split(/\n{2,}/)
+      .map((block) => block.trim())
+      .filter(Boolean)
+      .map((block) => {
+        const escaped = block
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        return `<p style="margin:14px 0;line-height:1.9;">${escaped.replace(/\n/g, '<br/>')}</p>`;
+      })
+      .join('');
+
+  const handleRunAssistant = async () => {
+    const source = getAssistantSourceText();
+    if (!source) {
+      setAssistantNotice('请先在公众号编辑器里输入正文，或选中一段文字。');
+      return;
+    }
+    setAssistantLoading(true);
+    setAssistantNotice(assistantApiKey.trim() ? '正在调用你的模型接口...' : '未填写 API Key，先使用本地轻量助手生成结果。');
+    try {
+      if (!assistantApiKey.trim()) {
+        setAssistantResult(localAssistantFallback(assistantTask, source));
+        return;
+      }
+      const res = await fetch('/api/ai-assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task: assistantTask,
+          content: source,
+          baseUrl: assistantBaseUrl,
+          model: assistantModel,
+          apiKey: assistantApiKey,
+        }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '智能小助手调用失败');
+      setAssistantResult(data.content || '');
+      setAssistantNotice(`已使用 ${data.model || assistantModel} 生成结果。`);
+    } catch (err: any) {
+      setAssistantNotice(err?.message || '智能小助手调用失败。');
+    } finally {
+      setAssistantLoading(false);
+    }
+  };
+
+  const handleCopyAssistantResult = async () => {
+    if (!assistantResult) return;
+    await navigator.clipboard.writeText(assistantResult);
+    setAssistantNotice('智能小助手结果已复制。');
+  };
+
+  const handleApplyAssistantResult = (mode: 'replace' | 'append') => {
+    if (!assistantResult.trim()) return;
+    const before = manualEditorRef.current?.innerHTML || manualContent;
+    const html = /<\/?[a-z][\s\S]*>/i.test(assistantResult) ? assistantResult : textToWechatHtml(assistantResult);
+    const nextContent = mode === 'replace' ? html : `${before}${html}`;
+    if (manualEditorRef.current) manualEditorRef.current.innerHTML = nextContent;
+    commitManualContent(nextContent, before);
+    setAssistantNotice(mode === 'replace' ? '已用助手结果替换正文。' : '已把助手结果追加到正文末尾。');
+  };
   
   // Iframe content wrapper
   const IframePreview = ({
@@ -2602,8 +2723,8 @@ export default function Home() {
     <main className="app-shell min-h-screen h-screen overflow-hidden text-slate-900 max-lg:h-auto max-lg:overflow-y-auto">
       <header className="h-16 border-b border-slate-100 bg-white/85 px-6 flex items-center justify-between shrink-0 backdrop-blur-xl max-sm:h-auto max-sm:px-4 max-sm:py-4">
         <div className="flex items-center gap-3">
-          <div className="h-9 w-9 rounded-lg bg-slate-950 text-white flex items-center justify-center shadow-[0_14px_28px_rgba(15,23,42,.16)]">
-            <BookOpen className="w-5 h-5" />
+          <div className="h-10 w-10 rounded-xl bg-white flex items-center justify-center overflow-hidden shadow-[0_14px_28px_rgba(15,23,42,.16)] ring-1 ring-slate-100">
+            <img src="/media/contentcraft-logo.png" alt="ContentCraft" className="h-full w-full object-cover" />
           </div>
           <div>
             <h1 className="text-[17px] font-extrabold tracking-normal text-slate-950">ContentCraft · 内容匠</h1>
@@ -3367,6 +3488,101 @@ export default function Home() {
               )
             ) : (
               <div className="space-y-5">
+                <section className="space-y-3 rounded-xl border border-blue-100 bg-gradient-to-r from-blue-50 to-cyan-50 p-3 shadow-[0_12px_30px_rgba(14,165,233,.08)]">
+                  <div className="flex items-start gap-2">
+                    <div className="mt-0.5 h-8 w-8 shrink-0 rounded-lg bg-slate-950 text-white flex items-center justify-center">
+                      <Bot className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold text-slate-950">智能小助手</h3>
+                      <p className="mt-1 text-xs leading-5 text-slate-600">接入自己的模型接口，优化公众号文字、标题、摘要和风险检查。</p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      ['polish', '润色'],
+                      ['titles', '标题'],
+                      ['digest', '摘要'],
+                      ['humanize', '去 AI 味'],
+                      ['audit', '风险检查'],
+                    ].map(([value, label]) => (
+                      <button
+                        key={value}
+                        onClick={() => setAssistantTask(value as typeof assistantTask)}
+                        className={cn(
+                          'h-8 rounded-md border text-xs font-semibold transition',
+                          assistantTask === value
+                            ? 'border-slate-950 bg-slate-950 text-white'
+                            : 'border-blue-100 bg-white/86 text-slate-600 hover:bg-white'
+                        )}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                  <details className="rounded-lg border border-blue-100 bg-white/80 p-2 text-xs">
+                    <summary className="cursor-pointer select-none font-semibold text-slate-700 flex items-center gap-1.5">
+                      <KeyRound className="inline h-3.5 w-3.5" />
+                      模型接口配置
+                    </summary>
+                    <div className="mt-3 space-y-2">
+                      <input
+                        value={assistantBaseUrl}
+                        onChange={(e) => setAssistantBaseUrl(e.target.value)}
+                        placeholder="https://api.openai.com/v1"
+                        className="w-full rounded-md border border-blue-100 bg-white px-2.5 py-2 text-xs outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
+                      />
+                      <input
+                        value={assistantModel}
+                        onChange={(e) => setAssistantModel(e.target.value)}
+                        placeholder="gpt-4.1-mini / deepseek-chat / qwen..."
+                        className="w-full rounded-md border border-blue-100 bg-white px-2.5 py-2 text-xs outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
+                      />
+                      <input
+                        value={assistantApiKey}
+                        onChange={(e) => setAssistantApiKey(e.target.value)}
+                        type="password"
+                        placeholder="API Key，仅本次请求使用"
+                        className="w-full rounded-md border border-blue-100 bg-white px-2.5 py-2 text-xs outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
+                      />
+                    </div>
+                  </details>
+                  <button
+                    onClick={handleRunAssistant}
+                    disabled={assistantLoading}
+                    className="w-full h-10 rounded-lg bg-slate-950 text-white hover:bg-slate-800 disabled:opacity-50 transition flex items-center justify-center gap-2 text-sm font-semibold"
+                  >
+                    {assistantLoading ? <RefreshCw className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
+                    {assistantApiKey.trim() ? '调用模型生成' : '本地生成预览'}
+                  </button>
+                  {assistantNotice && (
+                    <div className="rounded-lg border border-blue-100 bg-white/82 p-2 text-xs leading-5 text-slate-600">
+                      {assistantNotice}
+                    </div>
+                  )}
+                  {assistantResult && (
+                    <div className="space-y-2">
+                      <textarea
+                        value={assistantResult}
+                        onChange={(e) => setAssistantResult(e.target.value)}
+                        rows={7}
+                        className="w-full resize-y rounded-lg border border-blue-100 bg-white px-3 py-2 text-xs leading-5 outline-none focus:border-blue-300 focus:ring-2 focus:ring-blue-100"
+                      />
+                      <div className="grid grid-cols-3 gap-2">
+                        <button onClick={handleCopyAssistantResult} className="h-8 rounded-md border border-blue-100 bg-white text-xs font-semibold text-slate-700 hover:bg-blue-50">
+                          复制
+                        </button>
+                        <button onClick={() => handleApplyAssistantResult('append')} className="h-8 rounded-md border border-blue-100 bg-white text-xs font-semibold text-slate-700 hover:bg-blue-50">
+                          追加
+                        </button>
+                        <button onClick={() => handleApplyAssistantResult('replace')} className="h-8 rounded-md bg-blue-600 text-xs font-semibold text-white hover:bg-blue-700">
+                          替换
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </section>
+
                 <section className="space-y-3">
                   <div className="flex items-center gap-2">
                     <LayoutTemplate className="w-4 h-4 text-emerald-600" />
