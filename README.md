@@ -1,22 +1,26 @@
-# ContentCraft · 内容匠
+# ContentCraft — Open-source WeChat Article Editor
 
 <p align="center">
   <img src="./public/media/contentcraft-logo.png" alt="ContentCraft Logo" width="96" />
 </p>
 
 <p align="center">
-  <strong>面向微信公众号转载、排版与素材复用的开源编辑器</strong>
+  <strong>Import WeChat articles, extract SVG layout modules, replace images safely, and build a reusable local-first content library.</strong>
 </p>
 
 <p align="center">
-  <a href="https://github.com/luobuchao0321/contentcraft-editor/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/luobuchao0321/contentcraft-editor?style=social"></a>
-  <a href="https://github.com/luobuchao0321/contentcraft-editor/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/github/license/luobuchao0321/contentcraft-editor"></a>
-  <a href="https://github.com/luobuchao0321/contentcraft-editor"><img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-black"></a>
-  <a href="https://github.com/luobuchao0321/contentcraft-editor"><img alt="React" src="https://img.shields.io/badge/React-19-149eca"></a>
+  中文：开源微信公众号文章编辑器，支持文章导入、SVG 排版模块复用、图片替换、素材库沉淀与本地优先内容工作流。
 </p>
 
 <p align="center">
-  <a href="#在线体验">在线体验</a> ·
+  <a href="https://github.com/luobuchao0321/wechat-article-editor/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/luobuchao0321/wechat-article-editor?style=social"></a>
+  <a href="https://github.com/luobuchao0321/wechat-article-editor/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/github/license/luobuchao0321/wechat-article-editor"></a>
+  <a href="https://github.com/luobuchao0321/wechat-article-editor"><img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-black"></a>
+  <a href="https://github.com/luobuchao0321/wechat-article-editor"><img alt="React" src="https://img.shields.io/badge/React-19-149eca"></a>
+</p>
+
+<p align="center">
+  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1">Desktop App</a> ·
   <a href="#功能亮点">功能亮点</a> ·
   <a href="#快速开始">快速开始</a> ·
   <a href="#部署">部署</a> ·
@@ -25,28 +29,37 @@
 
 ---
 
-## 在线体验
+![ContentCraft brand card](./docs/assets/contentcraft-brand-card.png)
 
-当前建议优先部署到 Vercel，完成后把 Demo 地址填到这里：
+## 项目定位
 
-> Demo: `https://your-contentcraft-demo.vercel.app`
+ContentCraft 内容匠，是一个面向微信公众号文章转载、SVG 排版模块复用与素材沉淀的开源编辑器，适合内容创作者、运营团队和二次开发者快速搭建本地优先的公众号排版工作流。
+
+它的核心不是“又一个富文本编辑器”，而是把微信公众号文章、SVG 排版模块、图片替换、素材复用与官网/CMS 后台转载串成一个可二次开发的开源工作流。
+
+## 立即体验
+
+- 桌面安装包：[ContentCraft v1.0.1 Release](https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1)
+- 本地开发：见下方 [快速开始](#快速开始)
+- 在线 Demo：建议部署到 Vercel 后把地址补到这里
 
 一键部署：
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/luobuchao0321/contentcraft-editor)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/luobuchao0321/wechat-article-editor)
 
 ## 功能亮点
 
-ContentCraft 不是一个简单的富文本框，而是围绕“公众号转载、样式复用、模块二次编辑”设计的开源编辑器。
+ContentCraft 不是一个简单的富文本框，而是围绕“公众号转载、样式复用、模块二次编辑、本地素材沉淀”设计的开源编辑器。
 
 - 导入公众号文章：解析文章内容，提取正文、图片、SVG、排版模块等元素
 - 模块化编辑：插入的 SVG/排版模块可作为独立块管理，支持移动、留白、替换
 - 图片替换：识别模块中图片位置，替换前提示推荐尺寸，减少错位和拉伸
 - 样式调整：支持背景色、字体、字号、对齐、间距等常用排版操作
 - 素材沉淀：可把优秀公众号排版、SVG、动图等导入素材库并长期复用
+- 一键复制：转换为兼容微信公众号编辑器、135 类编辑器、CMS / KindEditor 的内联 HTML
 - 多格式导入：支持 HTML、Word、PDF、Excel 等内容来源
 - 本地优先：默认数据保存在浏览器本地，适合个人内容工作流和开源二次开发
-- 跨平台：macOS、Windows、Linux 都可以通过现代浏览器使用
+- 跨平台：支持 Web 本地运行，也提供 macOS、Windows、Linux 桌面安装包
 
 ## 功能预览
 
@@ -88,8 +101,8 @@ docs/assets/demo-library.gif
 ### 本地运行
 
 ```bash
-git clone https://github.com/luobuchao0321/contentcraft-editor.git
-cd contentcraft-editor
+git clone https://github.com/luobuchao0321/wechat-article-editor.git
+cd wechat-article-editor
 npm install
 npm run dev
 ```
@@ -150,11 +163,12 @@ Cloudflare Pages 也可以部署，但 Next.js 16 的适配需要额外关注运
 
 ## 支持平台
 
-| 操作系统 | 状态 | 浏览器 |
+| 平台 | 状态 | 说明 |
 | --- | --- | --- |
-| macOS | 支持 | Chrome / Edge / Safari / Firefox |
-| Windows | 支持 | Chrome / Edge / Firefox |
-| Linux | 支持 | Chrome / Edge / Firefox |
+| Web | 支持 | Chrome / Edge / Safari / Firefox |
+| macOS | 支持 | DMG：Apple Silicon 与 Intel |
+| Windows | 支持 | NSIS 安装包：x64 与 32 位 |
+| Linux | 支持 | AppImage / deb |
 
 ## 技术栈
 

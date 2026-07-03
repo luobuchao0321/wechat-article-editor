@@ -1,32 +1,45 @@
-# 🎨 ContentCraft
+# ContentCraft — Open-source WeChat Article Editor
 
 <p align="center">
-  <strong>Open-source WeChat Article Editor</strong><br/>
-  Article Import · Style Editing · Module Reuse · SVG Asset Management
+  <img src="./public/media/contentcraft-logo.png" alt="ContentCraft Logo" width="96" />
 </p>
 
 <p align="center">
-  <a href="#✨-features">✨ Features</a> ·
-  <a href="#🚀-quick-start">🚀 Quick Start</a> ·
-  <a href="#💻-supported-platforms">💻 Platforms</a> ·
-  <a href="#📄-license">📄 License</a> ·
-  🌐 <a href="./README.md">中文</a>
+  <strong>Import WeChat articles, extract SVG layout modules, replace images safely, and build a reusable local-first content library.</strong>
+</p>
+
+<p align="center">
+  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1">Desktop App</a> ·
+  <a href="#features">Features</a> ·
+  <a href="#quick-start">Quick Start</a> ·
+  <a href="#supported-platforms">Platforms</a> ·
+  <a href="./README.md">中文</a>
 </p>
 
 ---
 
-## ✨ Features
+![ContentCraft brand card](./docs/assets/contentcraft-brand-card.png)
 
-- **Article Import** — One-click import of WeChat article content with automatic SVG, image, and style extraction
+## Positioning
+
+ContentCraft is an open-source WeChat article editor for importing WeChat articles, reusing SVG layout modules, replacing images safely, and building local-first content workflows.
+
+It is not just another rich-text editor. Its core workflow is WeChat article import, SVG layout extraction, reusable module editing, asset persistence, and clean HTML export for WeChat editors, 135-style editors, CMS systems, and KindEditor-style backends.
+
+## Features
+
+- **WeChat Article Import** — Import article content and extract text, images, SVGs, and layout modules
 - **Style Editing** — Visual editing of background colors, fonts, alignment, spacing, and more
 - **Module Management** — Insert SVG modules as independent blocks; move up/down, add/remove spacing
 - **Image Replacement** — Click images within modules to replace; auto-detects recommended pixel dimensions
-- **Asset Library** — Import and persistently store custom WeChat styling assets (SVG, GIFs, etc.)
-- **Multi-format Import** — Supports Word (.docx), PDF, Excel, HTML document formats
+- **Asset Library** — Import and persistently store custom WeChat styling assets, SVG modules, and GIFs
+- **One-click HTML Copy** — Export inline HTML for WeChat editors, 135-style editors, CMS systems, and KindEditor-like backends
+- **Multi-format Import** — Supports HTML, Word, PDF, Excel, and more
 - **System Fonts** — Auto-detects installed OS fonts (macOS / Windows / Linux)
-- **Pure Frontend** — Built on Next.js with zero server dependency; data stored in local browser
+- **Local-first Workflow** — Drafts and reusable materials are stored locally by default
+- **Desktop Builds** — macOS, Windows, and Linux installers are available from GitHub Releases
 
-## 🚀 Quick Start
+## Quick Start
 
 ### Requirements
 
@@ -37,8 +50,8 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/luobuchao0321/contentcraft-editor.git
-cd contentcraft-editor
+git clone https://github.com/luobuchao0321/wechat-article-editor.git
+cd wechat-article-editor
 
 # Install dependencies
 npm install
@@ -56,13 +69,20 @@ npm run build
 npm start
 ```
 
-## 💻 Supported Platforms
+## Desktop App
 
-| OS | Status | Browser |
-|----|--------|---------|
-| macOS | Chrome / Edge / Safari / Firefox |
-| Windows | Chrome / Edge / Firefox |
-| Linux | Chrome / Edge / Firefox |
+Download the latest installers from:
+
+[ContentCraft v1.0.1 Release](https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1)
+
+## Supported Platforms
+
+| Platform | Status | Notes |
+| --- | --- | --- |
+| Web | Supported | Chrome / Edge / Safari / Firefox |
+| macOS | Supported | DMG for Apple Silicon and Intel |
+| Windows | Supported | NSIS installers for x64 and 32-bit |
+| Linux | Supported | AppImage and deb |
 
 ## Tech Stack
 
