@@ -12,6 +12,32 @@ permissions:
   contents: write
 
 jobs:
+  macos:
+    name: macOS universal
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+      - run: npm run build
+      - run: node scripts/prepare-electron-build.cjs
+      - run: npx electron-builder --mac dmg --arm64 --x64 --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          overwrite_files: true
+          files: |
+            release/*.dmg
+            release/*.dmg.blockmap
+
   windows:
     name: Windows ${{ matrix.arch }}
     runs-on: windows-latest
@@ -37,6 +63,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          overwrite_files: true
           files: |
             release/*.exe
             release/*.exe.blockmap
@@ -62,6 +89,7 @@ jobs:
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ github.event.inputs.tag || github.ref_name }}
+          overwrite_files: true
           files: |
             release/*.AppImage
             release/*.deb
