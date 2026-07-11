@@ -1,75 +1,47 @@
-# ContentCraft — Reuse WeChat SVG Layouts
+# ContentCraft — Open-source WeChat Article Editor
 
 <p align="center">
   <img src="./public/media/contentcraft-logo.png" alt="ContentCraft Logo" width="96" />
 </p>
 
-<p align="center">
-  <strong>Import WeChat articles, extract SVG layout modules, replace images safely, and build a reusable local content library.</strong>
-</p>
+<p align="center"><strong>Import a WeChat article, reuse its layout blocks, safely replace images, and build a local content library you own.</strong></p>
 
 <p align="center">
-  Most WeChat editors help you write Markdown. ContentCraft helps you reuse real WeChat layout modules.
-</p>
-
-<p align="center">
-  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1">Download Desktop App</a> ·
-  <a href="#why-contentcraft">Why ContentCraft</a> ·
-  <a href="#demos">Demos</a> ·
-  <a href="#quick-start">Quick Start</a> ·
+  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/latest"><strong>Download Desktop App</strong></a> ·
+  <a href="#quick-start">Quick start</a> ·
+  <a href="#features">Features</a> ·
   <a href="./README.md">中文</a>
 </p>
 
----
-
-![ContentCraft brand card](./docs/assets/contentcraft-brand-card.png)
+![ContentCraft editor](./docs/assets/editor-screenshot.jpg)
 
 ## Why ContentCraft
 
-ContentCraft is not another Markdown editor. It is an open-source tool to extract, replace, and reuse WeChat SVG layout blocks.
+ContentCraft is a local-first editor for people who need to reuse real WeChat article layouts. Import an article you are authorized to use, extract layout blocks, replace an individual image without breaking the surrounding module, save useful blocks locally, then copy compatible inline HTML to a WeChat editor or another rich-text backend.
 
-Paste a WeChat article, extract SVG layout modules, replace images safely, and build your own local content library.
+You do not need to know SVG or HTML to use the editor. SVG layout extraction is an implementation detail that helps preserve complex visual modules.
 
-## Demos
+## Quick start
 
-| Import | Replace | Reuse |
-| --- | --- | --- |
-| ![Import a WeChat article](./docs/assets/demo-import.gif) | ![Replace images inside SVG layout blocks](./docs/assets/demo-replace-image.gif) | ![Save layout blocks to local library](./docs/assets/demo-library.gif) |
+1. Open the `WeChat editor` workspace.
+2. Choose `Load sample` to try module selection, image replacement, and local saving immediately.
+3. Paste a public `https://mp.weixin.qq.com/s/...` link and import it into the canvas.
+4. Select a block or image, edit it, save reusable modules, and copy the final inline HTML.
 
 ## Features
 
-- **WeChat Article Import** — import text, images, SVGs, and layout modules
-- **SVG Layout Reuse** — save title blocks, footer blocks, separators, GIFs, and image cards
-- **Safe Image Replacement** — replace images inside modules with dimension hints
-- **Module Editing** — move, duplicate, delete, and add spacing around layout blocks
-- **AI Writing Assistant** — connect your own model provider for polishing, titles, summaries, and risk checks
-- **One-click HTML Copy** — export inline HTML for WeChat editors, 135-style editors, CMS systems, and KindEditor-like backends
-- **Multi-format Import** — supports HTML, Word, PDF, Excel, and more
-- **Local-first Workflow** — drafts and reusable materials are stored locally by default
-- **Desktop Builds** — macOS, Windows, and Linux installers are available from GitHub Releases
+- Import public WeChat articles and extract text, images, SVGs, and layout blocks.
+- Edit blocks independently: move, duplicate, delete, add spacing, and adjust visual styles.
+- Replace a specific image inside a module with recommended dimensions.
+- Save reusable title blocks, image cards, separators, GIFs, and footers to a local IndexedDB library.
+- Copy inline HTML for WeChat editors, CMS tools, and source-mode rich-text backends.
+- Import HTML, Word, PDF, and Excel content.
+- Connect your own AI provider for titles, summaries, polishing, humanization, and risk checks.
+- Run locally on the web or use desktop builds for macOS, Windows, and Linux.
 
-## Examples
+## Download and run
 
-Copyright-safe fixtures are included:
-
-```text
-examples/
-  sample-articles/
-  svg-blocks/
-  wechat-layouts/
-  before-after/
-```
-
-Start here: [examples/README.md](./examples/README.md)
-
-## Quick Start
-
-### Requirements
-
-- Node.js >= 18.0.0
-- npm >= 9.0.0
-
-### Install and Run
+Download the appropriate installer from the [latest release](https://github.com/luobuchao0321/wechat-article-editor/releases/latest). See [desktop download notes](./docs/DOWNLOADS.md) for platform guidance and checksums.
 
 ```bash
 git clone https://github.com/luobuchao0321/wechat-article-editor.git
@@ -78,51 +50,17 @@ npm install
 npm run dev
 ```
 
-Default local URL:
+Open `http://localhost:3001`.
 
-```text
-http://localhost:3001
-```
+## Privacy and deployment
 
-### Production Build
-
-```bash
-npm run build
-npm start
-```
-
-## Desktop App
-
-Download the latest installers:
-
-[ContentCraft v1.0.1 Release](https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1)
-
-## Supported Platforms
-
-| Platform | Status | Notes |
-| --- | --- | --- |
-| Web | Supported | Chrome / Edge / Safari / Firefox |
-| macOS | Supported | DMG for Apple Silicon and Intel |
-| Windows | Supported | NSIS installers for x64 and 32-bit |
-| Linux | Supported | AppImage and deb |
-
-## Tech Stack
-
-- Next.js 16
-- React 19
-- TypeScript 5
-- Tailwind CSS
-- Electron
-
-## Compliance
-
-- No paid/VIP assets from third-party editors are included.
-- No scraping or bypassing paid template restrictions.
-- Import only content and assets you have permission to process.
+Drafts and saved modules remain in local browser or desktop-app storage by default. Read [privacy and local data](./docs/PRIVACY.md) before deploying for a team, and [SECURITY.md](./SECURITY.md) before exposing a public deployment.
 
 ## Contributing
 
-Issues and Pull Requests are welcome. See [CONTRIBUTING.md](./CONTRIBUTING.md) and [Roadmap](./docs/ROADMAP.md).
+The [examples](./examples/README.md) directory contains copyright-safe fixtures. Contributions are welcome, especially around imported layout compatibility, image replacement regression tests, and local library import/export.
+
+Please read [CONTRIBUTING.md](./CONTRIBUTING.md) first.
 
 ## License
 

@@ -65,6 +65,7 @@ function startProductionServer() {
       PORT,
       HOSTNAME: HOST,
       NODE_ENV: 'production',
+      CONTENTCRAFT_DESKTOP: '1',
       ELECTRON_RUN_AS_NODE: '1',
     },
     stdio: 'pipe',

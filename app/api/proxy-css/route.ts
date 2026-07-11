@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import dns from 'node:dns';
 import { Agent } from 'undici';
+import { assertSafeRemoteUrl } from '@/lib/server/remoteUrl';
 
 const ipv4OnlyDispatcher = new Agent({
   connect: {
@@ -23,6 +24,7 @@ export async function GET(request: Request) {
   }
 
   try {
+    await assertSafeRemoteUrl(url);
     const cached = memoryCache.get(url);
     if (cached && Date.now() - cached.cachedAt < cacheTtlMs) {
       return new NextResponse(cached.body, {

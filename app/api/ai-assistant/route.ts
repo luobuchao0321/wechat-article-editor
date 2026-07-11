@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { assertSafeRemoteUrl } from '@/lib/server/remoteUrl';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -37,6 +38,12 @@ export async function POST(request: Request) {
     }
     if (!baseUrl) {
       return NextResponse.json({ error: '接口地址必须是 http 或 https URL。' }, { status: 400 });
+    }
+
+    try {
+      await assertSafeRemoteUrl(baseUrl, { allowLocal: process.env.CONTENTCRAFT_DESKTOP === '1' });
+    } catch (error: any) {
+      return NextResponse.json({ error: error?.message || '模型接口地址不安全。' }, { status: 400 });
     }
 
     const controller = new AbortController();

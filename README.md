@@ -1,95 +1,74 @@
-# ContentCraft — Reuse WeChat SVG Layouts
+# ContentCraft 内容匠｜开源公众号文章编辑器
 
 <p align="center">
   <img src="./public/media/contentcraft-logo.png" alt="ContentCraft Logo" width="96" />
 </p>
 
 <p align="center">
-  <strong>复制一篇公众号文章，提取 SVG 排版模块，替换图片，沉淀自己的本地素材库。</strong>
+  <strong>导入公众号文章，提取可复用的排版模块，换图改字，沉淀为自己的本地素材库。</strong>
 </p>
 
 <p align="center">
-  多数公众号编辑器解决“写文章”，ContentCraft 解决“复用好看的排版”。
+  面向内容创作者、运营团队和二次开发者的本地优先公众号内容工作台。
+</p>
+
+<p align="center">
+  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/latest"><strong>下载桌面版</strong></a> ·
+  <a href="#一分钟上手">一分钟上手</a> ·
+  <a href="#功能">功能</a> ·
+  <a href="./README.en.md">English</a>
 </p>
 
 <p align="center">
   <a href="https://github.com/luobuchao0321/wechat-article-editor/stargazers"><img alt="GitHub stars" src="https://img.shields.io/github/stars/luobuchao0321/wechat-article-editor?style=social"></a>
   <a href="https://github.com/luobuchao0321/wechat-article-editor/blob/main/LICENSE"><img alt="MIT License" src="https://img.shields.io/github/license/luobuchao0321/wechat-article-editor"></a>
-  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1"><img alt="Desktop release" src="https://img.shields.io/badge/Desktop-v1.0.1-111827"></a>
-  <a href="https://github.com/luobuchao0321/wechat-article-editor"><img alt="Next.js" src="https://img.shields.io/badge/Next.js-16-black"></a>
+  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/latest"><img alt="Desktop release" src="https://img.shields.io/github/v/release/luobuchao0321/wechat-article-editor?display_name=tag"></a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1">Download Desktop App</a> ·
-  <a href="#为什么是-contentcraft">为什么是 ContentCraft</a> ·
-  <a href="#功能演示">功能演示</a> ·
-  <a href="#快速开始">快速开始</a> ·
-  <a href="./README.en.md">English</a>
-</p>
+![ContentCraft editor](./docs/assets/editor-screenshot.jpg)
 
----
+## 它解决什么问题
 
-![ContentCraft brand card](./docs/assets/contentcraft-brand-card.png)
+看到一篇排版精致的公众号文章时，通常很难把标题块、图文卡片、SVG 动效、分隔符或尾图安全地复用到自己的文章里。手动复制 HTML 容易丢样式，替换一张图片又可能影响整个模块。
 
-## 为什么是 ContentCraft
-
-ContentCraft 不是 Markdown 编辑器，而是公众号 SVG 排版模块复用工具。
-
-它面向内容创作者、运营团队和二次开发者，帮助你把已经存在的公众号排版拆成可复用资产：
-
-- 导入公众号文章，提取正文、图片、SVG 和排版模块
-- 选中 SVG/HTML 模块，替换图片、改字、调背景和间距
-- 把标题块、尾图、分隔符、动图等保存到本地素材库
-- 在新文章里复用模块，并一键复制为公众号兼容的内联 HTML
-
-> 不是“从 Markdown 写一篇文章”，而是“把好看的公众号排版拆成可复用素材库”。
-
-## 功能演示
-
-| Import | Replace | Reuse |
-| --- | --- | --- |
-| ![Import a WeChat article](./docs/assets/demo-import.gif) | ![Replace images inside SVG layout blocks](./docs/assets/demo-replace-image.gif) | ![Save layout blocks to local library](./docs/assets/demo-library.gif) |
-
-## 立即体验
-
-- 桌面安装包：[ContentCraft v1.0.1 Release](https://github.com/luobuchao0321/wechat-article-editor/releases/tag/v1.0.1)
-- 本地开发：见下方 [快速开始](#快速开始)
-- 在线 Demo：准备部署中，当前可使用 Vercel 一键部署到自己的账号
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/luobuchao0321/wechat-article-editor)
-
-## 功能亮点
-
-- **公众号文章导入**：解析文章内容，提取正文、图片、SVG、排版模块
-- **SVG 模块复用**：把标题、尾图、分隔符、图文卡片保存为本地素材
-- **图片安全替换**：识别模块中图片位置，替换前提示推荐尺寸
-- **模块化编辑**：插入的 SVG/排版模块可独立移动、复制、留白和删除
-- **智能小助手**：接入自有模型接口，做标题、摘要、润色、去 AI 味和风险检查
-- **一键复制**：导出兼容微信公众号编辑器、135 类编辑器、CMS / KindEditor 的内联 HTML
-- **多格式导入**：支持 HTML、Word、PDF、Excel 等内容来源
-- **本地优先**：草稿和素材默认保存在本地，适合私有内容工作流
-- **跨平台桌面版**：支持 macOS、Windows、Linux 安装包
-
-## 示例库
-
-仓库内置了一组脱敏、版权安全的样例，方便测试和二次开发：
+ContentCraft 把这条流程变成：
 
 ```text
-examples/
-  sample-articles/     # 可导入测试文章
-  svg-blocks/          # 可复用 SVG 模块
-  wechat-layouts/      # HTML 排版片段
-  before-after/        # 复用前后示例
+导入有权处理的公众号文章
+→ 提取正文、图片与排版模块
+→ 选中一个模块，换图、改字、调整间距
+→ 保存到本地素材库
+→ 复制兼容的内联 HTML 到公众号后台或其他富文本系统
 ```
 
-从这里开始：[examples/README.md](./examples/README.md)
+SVG 是其中一种实现形式，不是使用门槛。你不需要会写 SVG 或 HTML，也能完成日常的素材复用与排版编辑。
 
-## 快速开始
+## 一分钟上手
 
-### 环境要求
+1. 打开「公众号编辑」。
+2. 点击左侧的「加载示例」，先体验模块选择、图片替换和保存。
+3. 再粘贴 `https://mp.weixin.qq.com/s/...` 的公开文章链接，选择「替换正文」或「追加正文」。
+4. 在画布中点击模块或图片，右侧会显示对应编辑项与图片推荐尺寸。
+5. 保存常用模块到本地素材库；完成后点击「一键复制公众号编辑器 HTML」。
 
-- Node.js >= 18.0.0
-- npm >= 9.0.0
+> 导入与素材复用只适用于你本人有权处理的文章、图片和排版内容。
+
+## 功能
+
+- **公众号文章导入**：解析公开文章正文、图片、SVG 与可识别的排版模块。
+- **模块化编辑**：模块可移动、复制、删除、前后留白，并可调整背景、边距与圆角。
+- **图片安全替换**：定位模块内的具体图片，替换前给出建议尺寸，避免其他图片一起丢失。
+- **本地素材库**：将标题块、图文卡片、尾图、分隔符、动图等长期保存到 IndexedDB。
+- **一键复制**：输出内联样式 HTML，适合粘贴到公众号后台、CMS 或支持源码模式的富文本编辑器。
+- **多格式导入**：支持 HTML、Word、PDF 与 Excel 内容导入。
+- **智能小助手**：接入自有模型接口，完成标题、摘要、润色、去 AI 味与风险检查。
+- **本地优先**：草稿与模块默认保存在本机；跨平台桌面版支持 macOS、Windows 与 Linux。
+
+## 下载与运行
+
+### 桌面版
+
+从 [Latest Release](https://github.com/luobuchao0321/wechat-article-editor/releases/latest) 下载对应系统的安装包。文件选择、校验方式和系统安全提示见 [下载说明](./docs/DOWNLOADS.md)。
 
 ### 本地运行
 
@@ -100,82 +79,42 @@ npm install
 npm run dev
 ```
 
-默认访问：
+打开 `http://localhost:3001`。
 
-```text
-http://localhost:3001
-```
+### 私有部署
 
-### 生产构建
+可以使用 Docker 或部署到自己的 Node.js 环境。公开部署前请阅读 [安全说明](./SECURITY.md)：文章导入接口仅接受公开微信公众号链接，且应在网关增加频率限制。
 
 ```bash
-npm run build
-npm start
+docker compose up --build
 ```
 
-### 桌面版安装包
+## 数据与隐私
 
-1.0.1 开始提供 Electron 桌面版。桌面版本质上是本地运行的 ContentCraft，不需要把文章内容上传到第三方服务。
+草稿与素材库默认保存于本地浏览器或桌面应用。AI 小助手仅在你主动调用时将文章内容和 API Key 发往你填写的模型服务。详细说明见 [隐私与本地数据](./docs/PRIVACY.md)。
 
-```bash
-npm run desktop:dev
-npm run desktop:build
-npm run dist:mac
-npm run dist:win
-npm run dist:linux
-```
+## 示例与贡献
 
-构建产物默认输出到 `release/`。正式跨平台安装包建议使用 GitHub Actions 构建。
+仓库包含版权安全的 HTML、SVG 与文章样例，位于 [examples](./examples/README.md)。
 
-## 支持平台
+欢迎提交 Issue 和 Pull Request，特别需要这些方向的贡献：
 
-| 平台 | 状态 | 说明 |
-| --- | --- | --- |
-| Web | 支持 | Chrome / Edge / Safari / Firefox |
-| macOS | 支持 | DMG：Apple Silicon 与 Intel |
-| Windows | 支持 | NSIS 安装包：x64 与 32 位 |
-| Linux | 支持 | AppImage / deb |
+- 真实公众号文章导入的兼容性反馈
+- 多图片 SVG/HTML 模块的替换测试用例
+- 本地素材库的搜索、分类、导入与导出
+- 不含第三方受版权保护素材的示例模块
 
-## 技术栈
+贡献方式见 [CONTRIBUTING.md](./CONTRIBUTING.md)，安全问题请参阅 [SECURITY.md](./SECURITY.md)。
 
-- Next.js 16
-- React 19
-- TypeScript
-- Tailwind CSS
-- Electron
-- Cheerio / Mammoth / ExcelJS / pdf-parse
+## 合规
 
-## 合规说明
-
-- 本项目为独立开源项目，不包含第三方编辑器的 VIP 素材或受版权保护素材
-- 不提供绕过付费限制、批量抓取付费素材、搬运商业模板等能力
-- 导入功能面向用户本人有权处理的文章、素材和文档
-- `.env`、`.cache/`、`.next/`、本地草稿和系统临时文件不应提交到仓库
-
-## 参与贡献
-
-欢迎提交 Issue 和 Pull Request。比较适合优先贡献的方向：
-
-- README 演示 GIF、教程和部署文档
-- 更稳定的公众号文章解析
-- SVG 模块选中与图片替换体验
-- 素材库分类、搜索、导入导出
-- 更多脱敏样例模板和测试用例
-
-详见 [CONTRIBUTING.md](./CONTRIBUTING.md) 和 [Roadmap](./docs/ROADMAP.md)。
-
-待创建的社区任务草稿见：[docs/ISSUES_TO_CREATE.md](./docs/ISSUES_TO_CREATE.md)。
-
-## 推广与收录
-
-- 发布文案：[docs/promotion/launch-posts.md](./docs/promotion/launch-posts.md)
-- Awesome 投稿文案：[docs/promotion/awesome-submission.md](./docs/promotion/awesome-submission.md)
+- 本项目不包含第三方付费素材或受版权保护的模板。
+- 不提供绕过付费限制、批量抓取付费素材或搬运商业模板的功能。
+- 请只导入、保存和复用你有权处理的内容与素材。
 
 ## 支持作者
 
-如果这个项目帮你节省了排版时间，可以请作者喝杯咖啡。也欢迎通过 Issue 反馈真实使用场景，后续会优先围绕内容创作者、运营团队和定制化公众号排版工作流继续优化。
-
-小程序中可以使用 `public/media/sponsor-poster.png` 作为中间页图片，并在 `<image>` 组件上开启 `show-menu-by-longpress="true"`，引导用户长按保存后打开微信扫码。
+如果项目帮你节省了排版时间，欢迎通过 Issue 分享真实使用场景或支持后续维护。
 
 <p align="center">
   <img src="./docs/assets/sponsor-poster-preview-v2.jpg" alt="支持 ContentCraft 开源创作" width="320" />

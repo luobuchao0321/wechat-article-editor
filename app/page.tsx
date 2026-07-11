@@ -270,6 +270,30 @@ export default function Home() {
     return t.trim();
   };
 
+  const loadSampleWechatArticle = () => {
+    const sampleHtml = `
+      <section data-role="contentcraft-sample" style="margin: 20px 0; padding: 22px; border: 1px solid #fed7aa; border-radius: 16px; background: #fff7ed;">
+        <p style="margin: 0 0 8px; color: #ea580c; font-size: 13px; font-weight: 700;">CONTENTCRAFT SAMPLE</p>
+        <h2 style="margin: 0; color: #172033; font-size: 24px;">把一次排版，变成长期可复用的内容资产</h2>
+        <p style="margin: 14px 0 0; color: #475569; line-height: 1.8;">点击下方图片或整块卡片，体验模块选中、图片替换、移动、留白和保存到素材库。</p>
+      </section>
+      <section data-role="contentcraft-sample" style="margin: 20px 0; overflow: hidden; border-radius: 16px; background: #0f172a;">
+        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1200' height='680' viewBox='0 0 1200 680'%3E%3Crect width='1200' height='680' fill='%231e293b'/%3E%3Ccircle cx='980' cy='120' r='220' fill='%23fb923c' opacity='.85'/%3E%3Ctext x='78' y='250' fill='white' font-family='Arial,sans-serif' font-size='66' font-weight='700'%3EYour reusable%3C/text%3E%3Ctext x='78' y='340' fill='white' font-family='Arial,sans-serif' font-size='66' font-weight='700'%3Elayout block%3C/text%3E%3Ctext x='82' y='430' fill='%23cbd5e1' font-family='Arial,sans-serif' font-size='30'%3EReplace this image without breaking the module.%3C/text%3E%3C/svg%3E" alt="可替换的示例图片" style="display: block; width: 100%; height: auto;" />
+        <p style="margin: 0; padding: 18px 22px; color: #e2e8f0; line-height: 1.7;">这是一个可独立编辑的图文模块。替换图片后，周围的文字、背景和圆角会继续保留。</p>
+      </section>
+      <blockquote style="margin: 20px 0; border-left: 4px solid #fb923c; padding: 8px 16px; color: #475569; background: #fff7ed;">先用示例熟悉操作，再导入你有权处理的公众号文章。</blockquote>
+    `.trim();
+
+    setWorkspaceMode('wechat');
+    setManualTitle('ContentCraft 示例：复用一段排版模块');
+    setManualAuthor('ContentCraft');
+    setManualSummary('先用内置示例体验模块选择、图片替换、保存与复制。');
+    setImportedHtml(sampleHtml);
+    setImportedModules(extractWechatModulesFromHtml(sampleHtml, '内置示例'));
+    commitManualContent(sampleHtml, manualContent);
+    setImportNotice('已加载内置示例。点击图片或卡片后，在右侧尝试替换图片、移动模块和保存素材。');
+  };
+
   useEffect(() => {
     wechatModuleStore
       .all()
@@ -1935,7 +1959,7 @@ export default function Home() {
         }
         const sizeKb = Math.ceil(new Blob([html]).size / 1024);
         await navigator.clipboard.writeText(html);
-        alert(`HTML 已复制！约 ${sizeKb} KB。可粘贴到微信公众号编辑器、135 类编辑器或后台 HTML/源代码模式。`);
+        alert(`HTML 已复制！约 ${sizeKb} KB。可粘贴到微信公众号编辑器、CMS 或支持 HTML/源代码模式的后台。`);
     } catch (err: any) {
         console.error('复制失败', err);
         alert(`复制失败: ${err.message || '未知错误'}`);
@@ -2858,9 +2882,18 @@ export default function Home() {
                 </section>
 
                 <section className="space-y-3">
-                  <div>
-                    <h2 className="text-sm font-semibold text-slate-950">新建公众号内容</h2>
-                    <p className="mt-1 text-xs leading-5 text-slate-500">输入基础信息，在中间画布编辑正文，并插入排版模块。</p>
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h2 className="text-sm font-semibold text-slate-950">新建公众号内容</h2>
+                      <p className="mt-1 text-xs leading-5 text-slate-500">输入基础信息，在中间画布编辑正文，并插入排版模块。</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={loadSampleWechatArticle}
+                      className="shrink-0 rounded-md border border-orange-200 bg-orange-50 px-2.5 py-1.5 text-xs font-semibold text-orange-700 hover:bg-orange-100"
+                    >
+                      加载示例
+                    </button>
                   </div>
                   <div className="space-y-2">
                     <label className="text-xs font-medium text-slate-600">标题</label>
@@ -3418,7 +3451,7 @@ export default function Home() {
                         <AlertCircle className="w-3.5 h-3.5" />
                         兼容提示
                       </strong>
-                      粘贴到微信公众号编辑器、135 类编辑器、CMS 或 KindEditor 时，建议先进入“源代码/HTML”模式。保真模式会把复杂公众号模块转换为更稳定的 HTML。
+                      粘贴到微信公众号编辑器、CMS 或支持源码模式的富文本后台时，建议先进入“源代码/HTML”模式。高保真模式会把复杂公众号模块转换为更稳定的 HTML。
                     </div>
 
                     <div className="space-y-3 rounded-xl border border-slate-100 bg-white/82 p-3 shadow-[0_12px_30px_rgba(15,23,42,.04)]">
@@ -3459,7 +3492,7 @@ export default function Home() {
                             checked={exportFormat === 'full'}
                             onChange={() => setExportFormat('full')}
                           />
-                          公众号/135 保真模式
+                          高保真模式
                         </label>
                       </div>
                     </div>
@@ -3808,7 +3841,7 @@ export default function Home() {
                     <h3 className="text-sm font-semibold text-slate-950">公众号导出</h3>
                   </div>
                   <div className="rounded-xl border border-slate-100 bg-white/82 p-3 text-xs leading-5 text-slate-600 shadow-[0_12px_30px_rgba(15,23,42,.04)]">
-                    输出为内联样式 HTML，适合粘贴到公众号编辑器、135 类排版工具或支持 HTML 的后台编辑器。
+                    输出为内联样式 HTML，适合粘贴到公众号编辑器、CMS 或支持 HTML 的后台编辑器。
                   </div>
                   <button
                     onClick={handleCopyManualWechatHtml}

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import * as cheerio from 'cheerio';
 import dns from 'node:dns';
 import { Agent } from 'undici';
+import { assertWechatArticleUrl } from '@/lib/server/remoteUrl';
 
 type ArticleCacheEntry = { body: any; cachedAt: number };
 const articleCache = new Map<string, ArticleCacheEntry>();
@@ -88,6 +89,12 @@ export async function GET(request: Request) {
 
   if (!url) {
     return NextResponse.json({ error: 'Missing URL parameter' }, { status: 400 });
+  }
+
+  try {
+    await assertWechatArticleUrl(url);
+  } catch (error: any) {
+    return NextResponse.json({ error: error?.message || '文章链接不安全。' }, { status: 400 });
   }
 
   const cached = articleCache.get(url);

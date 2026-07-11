@@ -16,7 +16,8 @@
     "dist:mac:x64": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --mac dmg --x64",
     "dist:mac:desktop": "node scripts/build-mac-release-on-desktop.cjs",
     "dist:win": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --win nsis --x64 --ia32",
-    "dist:linux": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --linux AppImage deb --x64"
+    "dist:linux": "npm run build && node scripts/prepare-electron-build.cjs && electron-builder --linux AppImage deb --x64",
+    "dist:checksums": "node scripts/write-checksums.cjs"
   },
   "keywords": [
     "wechat",
@@ -100,6 +101,7 @@
     ],
     "mac": {
       "category": "public.app-category.productivity",
+      "artifactName": "ContentCraft-${version}-${arch}.${ext}",
       "target": [
         {
           "target": "dmg",

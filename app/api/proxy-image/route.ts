@@ -4,6 +4,7 @@ import { Agent } from 'undici';
 import crypto from 'node:crypto';
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import { assertSafeRemoteUrl } from '@/lib/server/remoteUrl';
 
 export const runtime = 'nodejs';
 
@@ -59,6 +60,7 @@ export async function GET(request: Request) {
 
   try {
     const normalizedUrl = url.split('#')[0];
+    await assertSafeRemoteUrl(normalizedUrl);
     const cacheKey = cacheKeyForUrl(normalizedUrl);
     const metaPath = path.join(cacheRoot, `${cacheKey}.json`);
     const bodyPath = path.join(cacheRoot, `${cacheKey}.bin`);
@@ -108,6 +110,7 @@ export async function GET(request: Request) {
         let current = inputUrl;
         let redirects = 0;
         for (;;) {
+          await assertSafeRemoteUrl(current);
           const res = await (fetch as any)(current, {
             signal: controller.signal,
             redirect: 'manual',
@@ -122,6 +125,7 @@ export async function GET(request: Request) {
               throw new Error('too many redirects');
             }
             current = new URL(loc, current).toString();
+            await assertSafeRemoteUrl(current);
             continue;
           }
           return { response: res as Response, redirects, finalUrl: current };
